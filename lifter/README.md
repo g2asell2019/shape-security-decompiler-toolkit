@@ -35,12 +35,11 @@ var ir = irLifter.lift()
 
 var jsLifter = new JavascriptLifter(ir)
 var outputAst = jsLifter.lift()
-fs.writeFileSync('output_fn.js', generate(outputAst).code)
 
-const ast = parse(fs.readFileSync('input/fn_test.js').toString())
+var cleaner = new JavascriptBeautifier(outputAst)
 
-var cleaner = new JavascriptBeautifier(ast)
-cleaner.clean()
+fs.writeFileSync("cleaned.js", cleaner.clean());
+
 
 ```
 
