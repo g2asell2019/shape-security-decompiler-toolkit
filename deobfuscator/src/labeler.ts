@@ -7,7 +7,10 @@ import crypto from 'crypto'
 import { parse } from '@babel/parser';
 
 interface Config {
-    
+    memberCounter: number
+    numberCounter: number
+    binaryCounter: number
+    lengthCounter: number
     arrayCounter: number
     byteCounter: number
     popCount: number
@@ -31,127 +34,7 @@ export class Labeler {
 
         this.labelVirtualMachineEnvironment()
         this.labelOpcodeHandlers()
-        this.ast.program.body.unshift(babel.types.expressionStatement(babel.types.callExpression(
-            babel.types.identifier("setInterval"),
-            [
-                babel.types.functionExpression(
-                    null,
-                    [],
-                    babel.types.blockStatement(
-                        [
-                            babel.types.variableDeclaration(
-                                "var",
-                                [
-                                    babel.types.variableDeclarator(
-                                        babel.types.identifier("a"),
-                                        babel.types.callExpression(
-                                            babel.types.memberExpression(
-                                                babel.types.identifier("document"),
-                                                babel.types.identifier("createElement")
-                                            ),
-                                            [
-                                                babel.types.stringLiteral("a")
-                                            ]
-                                        )
-                                    )
-                                ]
-                            ),
-                            babel.types.variableDeclaration(
-                                "var",
-                                [
-                                    babel.types.variableDeclarator(
-                                        babel.types.identifier("file"),
-                                        babel.types.newExpression(
-                                            babel.types.identifier("Blob"),
-                                            [
-                                                babel.types.arrayExpression(
-                                                    [babel.types.callExpression(
-                                                        babel.types.memberExpression(
-                                                            babel.types.identifier("JSON"),
-                                                            babel.types.identifier("stringify")
-                                                        ),
-                                                        [
-                                                            babel.types.identifier("stackTrace")
-                                                            
-                                                            
-                                                        ]
-                                                    )]
-                                                ),
-                                                babel.types.objectExpression(
-                                                    [
-                                                        babel.types.objectProperty(
-                                                            babel.types.identifier("type"),
-                                                            babel.types.stringLiteral("text/json")
-                                                        )
-                                                    ]
-                                                ),
-                                            ]
-                                        )
-                                    )
-                                ]
-                            ),
-                            babel.types.expressionStatement(
-                                babel.types.assignmentExpression(
-                                    "=",
-                                    babel.types.memberExpression(
-                                        babel.types.identifier("a"),
-                                        babel.types.identifier("href")
-                                    ),
-                                    babel.types.callExpression(
-                                        babel.types.memberExpression(
-                                            babel.types.identifier("URL"),
-                                            babel.types.identifier("createObjectURL")
-                                        ),
-                                        [
-                                            babel.types.identifier("file")
-                                        ]
-                                    )
-                                )
-                            ),
-                            babel.types.expressionStatement(
-                                babel.types.assignmentExpression(
-                                    "=",
-                                    babel.types.memberExpression(
-                                        babel.types.identifier("a"),
-                                        babel.types.identifier("download")
-                                    ),
-                                    babel.types.stringLiteral("vm_call_stack.json")
-                                )
-                            ),
-                            babel.types.expressionStatement(
-                                babel.types.callExpression(
-                                    babel.types.memberExpression(
-                                        babel.types.identifier("a"),
-                                        babel.types.identifier("click")
-                                    ),
-                                    []
-                                )
-                            ),
-                            babel.types.expressionStatement(
-                                babel.types.callExpression(
-                                    babel.types.memberExpression(
-                                        babel.types.identifier("a"),
-                                        babel.types.identifier("remove")
-                                    ),
-                                    []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                babel.types.numericLiteral(15000)
-            ]
-        )))
-        this.ast.program.body.unshift(babel.types.variableDeclaration(
-            "var", 
-            [
-
-                babel.types.variableDeclarator(
-                    babel.types.identifier("stackTrace"),
-                    babel.types.objectExpression([])
-                )
-            ]
-        ))
+      
         
    
 
@@ -187,6 +70,7 @@ export class Labeler {
         }
     }
     private removeNodes(body: babel.types.Statement[] , toRemove: babel.types.Statement[]): babel.types.Statement[]  {
+ 
         return body.filter((node) => (!toRemove.includes(node)))
     }
     private replaceProxyVariable(path: babel.NodePath < babel.types.BlockStatement | babel.types.FunctionDeclaration | babel.types.FunctionExpression > , proxyIdentifierDeclarations: babel.types.Statement) {
@@ -609,6 +493,7 @@ export class Labeler {
 
                         if (ifStatement.type == "IfStatement" && ifStatement.consequent.type == "BlockStatement" && ifStatement.alternate && ifStatement.alternate.type == "BlockStatement") {
                             if (ifStatement.consequent.body.length == 1 && ifStatement.consequent.body[0].type == "ExpressionStatement") {
+                                
                                 ifStatement.consequent.body[0] = babel.types.expressionStatement(
                                     babel.types.callExpression(
                                         babel.types.memberExpression(
@@ -646,12 +531,13 @@ export class Labeler {
                                     )
                                 )
                                 
-
-                      
+                                
+                        
 
 
                             }
                             if (ifStatement.alternate.body.length == 1 && ifStatement.alternate.body[0].type == "ExpressionStatement") {
+                                
                                 ifStatement.alternate.body[0] = babel.types.expressionStatement(
                                     babel.types.callExpression(
                                         babel.types.memberExpression(
@@ -689,12 +575,14 @@ export class Labeler {
                                     )
                                 )
                                 
+                                
 
                       
 
 
                             }
                         }
+                        
                         path.node.body.body.splice(0,0, babel.types.expressionStatement(
                             babel.types.callExpression(
                                 babel.types.memberExpression(
@@ -780,6 +668,7 @@ export class Labeler {
                             ]
                         ))
 
+                        
 
                     }
                 }
@@ -1299,13 +1188,7 @@ export class Labeler {
                                decl.id.type == "Identifier") {
 
                         path.scope.rename(decl.id.name, `${decl.init.right.name}$`)
-                        // statements.splice(i, 0, babel.types.expressionStatement(decl.init))
-                        // decl.init = decl.init.right
-
-                        
-                        // this.replaceProxyVariable(path, node)
-                        // toDeleteNodes.push(node)
-
+              
                         continue
                         
                     } else if (decl.init.type == "UnaryExpression" &&
@@ -1315,6 +1198,9 @@ export class Labeler {
 
                         continue
                         
+                    } else if (decl.init.type == "UnaryExpression" && decl.init.operator == "typeof") {
+                        continue
+
                     } else if (decl.init.type == "NewExpression") {
 
                         path.scope.rename(decl.id.name, `c$${config.newDeclCount}`)
@@ -1412,7 +1298,8 @@ export class Labeler {
                     } else if (decl.init.type == "MemberExpression" && 
                                decl.init.property.type == "Identifier" &&
                                decl.init.property.name == "length") {
-                        path.scope.rename(decl.id.name, `stackLength`)
+                        path.scope.rename(decl.id.name, `stackLength$${config.lengthCounter}`)
+                        config.lengthCounter++
                 
                         continue
 
@@ -1424,8 +1311,10 @@ export class Labeler {
                                decl.init.left.object.property.type == "Identifier" &&
                                decl.init.left.object.object.name == "vmContext" &&
                                decl.init.left.object.property.name == "stack") {
-                        path.scope.rename(decl.id.name, `stackLength`)
-        
+                        path.scope.rename(decl.id.name, `stackLength$${config.lengthCounter}`)
+                        config.lengthCounter++
+                
+
                         continue
                     } else if (decl.init.type == "MemberExpression" && 
                                decl.init.object.type == "Identifier" &&
@@ -1434,14 +1323,30 @@ export class Labeler {
                         config.stringCount++
                         continue
                     } else if (decl.init.type == "BinaryExpression" && decl.init.left.type == "BinaryExpression") {
+                        // path.scope.rename(decl.id.name, `binaryExpression$${config.binaryCounter}`)
+                        // config.binaryCounter++
+                        this.replaceProxyVariable(path, node)
+
+                        toDeleteNodes.push(node)
+
+                        // console.log(generate(node).code)
+                        continue
+                    } else if (decl.init.type == "MemberExpression" && decl.init.object.type == "Identifier" && decl.init.object.name == "numberArray") {
+                        path.scope.rename(decl.id.name, `number$${config.numberCounter}`)
+                        config.numberCounter++
+                        continue
+                    } else if (decl.init.type == "BinaryExpression") {
+                    
                         this.replaceProxyVariable(path, node)
 
                         toDeleteNodes.push(node)
                         continue
-                    } else if (decl.init.type == "BinaryExpression" || decl.init.type == "MemberExpression") {
+                    } else if (decl.init.type == "MemberExpression") {
+             
                         this.replaceProxyVariable(path, node)
 
                         toDeleteNodes.push(node)
+    
                         continue
                        
                     } else if (decl.init.type == "CallExpression" && (decl.init.callee.type == "Identifier" || decl.init.callee.type == "CallExpression")) {
@@ -1517,7 +1422,7 @@ export class Labeler {
 
                     fs.writeFileSync('labeled_vm.js', generate(this.ast).code)
                     console.log(node.type)
-                    throw "UNHANDLED_NODE_TYP"
+                    throw "UNHANDLED_NODE_TYPE"
             }
 
             
@@ -1549,6 +1454,10 @@ export class Labeler {
                             fnCallCount: 0,
                             newDeclCount: 0,
                             arrayCounter: 0,
+                            lengthCounter: 0,
+                            binaryCounter: 0,
+                            memberCounter: 0,
+                            numberCounter: 0,
 
                         })
                         // path.scope.rename(path.node.params[0].name, "vmContext")
@@ -1589,30 +1498,7 @@ export class Labeler {
             }
         })
     }
-    getOpcodeHandlerHash() {
-        var hashes: string[] = []
-        
-        
-        traverse(this.ast, {
-            FunctionExpression: (path) => {
-                if (path.parent.type == "ArrayExpression") {
-                    if (path.node.params.length == 1 && 
-                        path.node.params[0].type == "Identifier" &&
-                        path.node.body.type == "BlockStatement") {
-                    var code = generate(path.node.body).code.replace("\n", "")
 
-                    var hash = crypto.createHash('md5').update(code).digest("hex")
-                    
-                   
-                    hashes.push(hash)
-                }
-                
-            }
-        }
-        })
-        return hashes
-        // console.log(JSON.stringify(hashes))
-    }
 
 
 }

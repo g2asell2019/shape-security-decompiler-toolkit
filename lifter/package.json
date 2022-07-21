@@ -4,8 +4,7 @@
   "description": "",
   "main": "rename.js",
   "scripts": {
-    "test": "tsc && node dist/index.js --test && node dist/index.js --compare",
-    "start": "tsc && node dist/index.js --server"
+    "start": "tsc && node --max_old_space_size=4096 dist/index.js"
   },
   "author": "flusk",
   "license": "ISC",

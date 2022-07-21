@@ -9,7 +9,10 @@ if (myArgs[0] == "--test") {
     var labeler = new Labeler(ast)
     
     var labeled = labeler.labelVirtualMachine()
+    fs.writeFileSync('./output/labeled_vm.js', labeled)
 
+
+    
     var tracer = new Tracer(parse(labeled))
     
     fs.writeFileSync('./output/injected_vm.js', tracer.injectTracer())

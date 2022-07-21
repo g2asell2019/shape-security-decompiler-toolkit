@@ -55,6 +55,9 @@ class JavascriptLifter {
             ["IF_BRANCH", 2],
             ["ELSE_BRANCH", 1],
             ["IF_ELSE_BRANCH", 3],
+            ["SAVE_BINARY_EXPRESSION", 2],
+            ["SAVE_MEMBER_EXPRESSION", 2],
+            ["SAVE_NUMBER", 2]
         ]);
     }
     getRawValue(arg) {
@@ -195,6 +198,27 @@ class JavascriptLifter {
             ]),
         ])));
     }
+    translateMemberExpression(op) {
+        const dst = this.getRawValue(op.args[0]);
+        const expression = this.translateArgumentIntoAST(op.args[1]);
+        this.appendStatement(babel.types.variableDeclaration("var", [
+            babel.types.variableDeclarator(babel.types.identifier(`memberExpression$${dst}`), expression),
+        ]));
+    }
+    translateBinaryExpression(op) {
+        const dst = this.getRawValue(op.args[0]);
+        const expression = this.translateArgumentIntoAST(op.args[1]);
+        this.appendStatement(babel.types.variableDeclaration("var", [
+            babel.types.variableDeclarator(babel.types.identifier(`binaryExpression$${dst}`), expression),
+        ]));
+    }
+    translateNumber(op) {
+        const dst = this.getRawValue(op.args[0]);
+        const expression = this.translateArgumentIntoAST(op.args[1]);
+        this.appendStatement(babel.types.variableDeclaration("var", [
+            babel.types.variableDeclarator(babel.types.identifier(`number$${dst}`), expression),
+        ]));
+    }
     translateCallExpression(op) {
         const dst = this.getRawValue(op.args[0]);
         var fn = babel.types.nullLiteral();
@@ -328,6 +352,15 @@ class JavascriptLifter {
             throw "INVALID_ARG_LENGTH";
         }
         switch (microOp.instruction) {
+            case "SAVE_NUMBER":
+                this.translateNumber(microOp);
+                return;
+            case "SAVE_MEMBER_EXPRESSION":
+                this.translateMemberExpression(microOp);
+                return;
+            case "SAVE_BINARY_EXPRESSION":
+                this.translateBinaryExpression(microOp);
+                return;
             case "IF_ELSE_BRANCH":
                 this.translateIfElse(microOp);
                 return;

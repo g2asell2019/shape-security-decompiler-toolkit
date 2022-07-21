@@ -1,4 +1,4 @@
-export type Instruction = "IF_ELSE_BRANCH" | "ELSE_BRANCH" | "IF_BRANCH" | "PUSH" | "SET" | "DEFINE_PROPERTY" | "SET_GLOBAL_EMPTY_OBJECT" | "SAVE_CALL_FUNCTION" | "JMP"
+export type Instruction = "IF_ELSE_BRANCH" | "ELSE_BRANCH" | "IF_BRANCH" | "PUSH" | "SET" | "DEFINE_PROPERTY" | "SET_GLOBAL_EMPTY_OBJECT" | "SAVE_CALL_FUNCTION" | "JMP" | "SAVE_BINARY_EXPRESSION" | "SAVE_MEMBER_EXPRESSION" | "SAVE_NUMBER"
 
 export type FunctionTrace = Opcode[]
 export interface Argument {

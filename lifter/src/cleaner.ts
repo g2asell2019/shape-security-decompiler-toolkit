@@ -1,5 +1,6 @@
 import traverse from "@babel/traverse";
 import fs from "fs";
+import * as babel from "@babel/core";
 import generate from "@babel/generator";
 import { BlockStatementTraverser } from "./traverser";
 
@@ -48,9 +49,53 @@ export class JavascriptBeautifier {
    
 
   }
+  
+  private removeEmptyBlocks() {
+    
+    traverse(this.ast, {
+      FunctionDeclaration: (path) => {
+        if (path.node.id && this.isParentFunction(path.node.id.name)) {
+          const redirectMap: Map<string, string> = new Map<string, string>()
 
-  clean() {
+          path.traverse({
+            FunctionDeclaration: (path) => {
+              if (path.node.id && path.node.body.body.length == 1) {
+                const node = path.node.body.body[0]
+                if (node.type == "ExpressionStatement" &&
+                    node.expression.type == "CallExpression" &&
+                    node.expression.callee.type == "Identifier" &&
+                    node.expression.callee.name.includes("block_")) {
+                    
+                    redirectMap.set(path.node.id.name, node.expression.callee.name)
+
+                    path.remove()
+                    path.skip()
+                }
+              }
+            },
+          });
+          path.traverse({
+            CallExpression: (path) => {
+              if (path.node.callee.type == "Identifier" && redirectMap.has(path.node.callee.name)) {
+                const redirectedPath = redirectMap.get(path.node.callee.name)
+                if (redirectedPath) {
+                  path.replaceWith(babel.types.identifier(redirectedPath))
+                }
+               
+              }
+            }
+          })
+        
+          
+        }
+      },
+    });
+    
+  }
+
+  clean(): string {
     this.traverseParentFunctions();
-    fs.writeFileSync("cleaned.js", generate(this.ast).code);
+    this.removeEmptyBlocks();
+    return generate(this.ast).code
   }
 }

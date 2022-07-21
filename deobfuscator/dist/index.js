@@ -13,6 +13,7 @@ if (myArgs[0] == "--test") {
     var ast = (0, parser_1.parse)(fs_1.default.readFileSync("./input/raw.js").toString());
     var labeler = new labeler_1.Labeler(ast);
     var labeled = labeler.labelVirtualMachine();
+    fs_1.default.writeFileSync('./output/labeled_vm.js', labeled);
     var tracer = new tracer_1.Tracer((0, parser_1.parse)(labeled));
     fs_1.default.writeFileSync('./output/injected_vm.js', tracer.injectTracer());
     // labeler.traverseOpcodeHandlers()
