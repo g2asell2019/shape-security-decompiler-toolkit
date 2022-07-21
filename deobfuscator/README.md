@@ -15,6 +15,10 @@ This is the deobfuscator for shape's virtual machine interpreter script, it will
 
 The deobfuscator is capable of deobfuscating every single version of shape's virtual machine interpreter script and injecting a tracer into the script that traces all of the important op's that're executed in the virtual machine. It will automatically save the output every 30s as a JSON with a save of the functions that're created in the virtual machine opcodes along with all of the branches that was visited in each function. This output is meant to be used in the lifter where it is then cleaned and translated into javascript.
 
+## Note
+
+The vm call trace will be over 400 MB+, this is because the tracer logs all of the branches that is visited in the browser and preserves all function versions to make sure we lose as little data as possible. There is a devirtualized trace in lifter/cleaned.js that was from target.
+
 ## Usage
 
 It is meant to be used as a server that deobfuscates scripts on the fly and replaces it in the browser, it will start a server on the port **6969** that accepts vm scripts via POST request and returns a deobfuscated version.
