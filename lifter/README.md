@@ -15,7 +15,7 @@ The trace lifter is capable of lifting the traced logs we collected from our mod
 - Instantiate and use the lifter and cleaner classes
 
 
-Note: Function call arguments aren't accurate
+Note: Function call arguments aren't accurate and while loops are not created but their behavior is representated in the block calls.
 ```js
 var functionTraces: {[key: string]: FunctionTrace[]}  = JSON.parse(fs.readFileSync('input/vm_call_stack.json').toString())
 
