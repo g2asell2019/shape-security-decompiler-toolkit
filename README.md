@@ -1,7 +1,7 @@
 ## Shape Security Decompiler Tool-Kit
 
 
-This tool kit is capable of dynamically deobfuscating all versions of shape security's virtual machine interpreter script and injecting a custom tracer that is capable of tracing all opcodes that is executed in the virtual machine script. It creates a custom virtual machine script that will save these logs as JSON
+This tool kit is capable of dynamically deobfuscating all versions of shape security's virtual machine interpreter script and injecting a custom tracer that is capable of tracing all opcodes that is executed in the virtual machine script. It also has a custom lifter that will lift these traces into javascript.
 
 ## Javascript Virtualization Obfuscation
 
