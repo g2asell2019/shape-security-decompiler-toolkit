@@ -14,3 +14,4 @@ Shape Security implements a custom stack based CISC virtual machine in javascrip
 ## Downside
 
 Since the deobfuscator hooks directly an edited virtual machine script, we run into the risks of self defending code and tamper checks in the code. I haven't extensively analyzed the output for these type of checks yet so there is a risk the current output could carry code that is partially generated from fake paths
+Since the tracer keeps track of all conditionals in the bytecode, all tamper checks should still be prevalent.
