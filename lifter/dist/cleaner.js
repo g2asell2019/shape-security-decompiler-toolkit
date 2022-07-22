@@ -82,7 +82,7 @@ class JavascriptBeautifier {
                             if (path.node.callee.type == "Identifier" && redirectMap.has(path.node.callee.name)) {
                                 const redirectedPath = redirectMap.get(path.node.callee.name);
                                 if (redirectedPath) {
-                                    path.replaceWith(babel.types.identifier(redirectedPath));
+                                    path.replaceWith(babel.types.callExpression(babel.types.identifier(redirectedPath), []));
                                 }
                             }
                         }
