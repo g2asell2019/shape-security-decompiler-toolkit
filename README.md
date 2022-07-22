@@ -9,7 +9,7 @@ Javascript virtualization obfuscation is a obfuscation technique that requires t
 
 ## Overview
 
-Shape Security implements a custom stack based CISC virtual machine in javascript with a rotating instruction set that executes custom bytecode. They do this in order to protect the source code that is executed on the browser side. The virtualized code itself was also obfuscated before it was virtualized in order to deter reverse engineering attempts. This repo isn't about using the devirtualized code to create a bypass but instead mainly about the reverse engineering process I took to understanding their virtual machine and then writing a lifter that lifts the executed bytecode into javascript. The approach I took in this tool kit was not to target the full instruction but instead the micro instructions that're consistent across all versions and to then hook into those.
+Shape Security implements a custom stack based CISC virtual machine in javascript with a rotating instruction set that executes custom bytecode. They do this in order to protect the source code that is executed on the browser side. The virtualized code itself was also obfuscated before it was virtualized in order to deter reverse engineering attempts. This repo isn't about using the devirtualized code to create a bypass but instead mainly about the reverse engineering process to understanding their virtual machine and then writing a lifter that lifts the executed bytecode into javascript. The approach I took in this tool kit was not to target the full instruction but instead the micro instructions that're consistent across all versions and to then hook into those.
 
 
 
