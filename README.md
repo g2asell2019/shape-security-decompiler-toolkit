@@ -14,7 +14,7 @@ Shape Security implements a custom stack based CISC virtual machine in javascrip
 
 ## Self Defending Inquiry
 
-NOTE as of 2022-07-21 I can confidently say that Shape dosen't have any self defending checks in their virtual machine execution. The injected virtual machine is able to gen headers that pass fine on target. I can confidently say that the paths that're traced with the injected virtual machine are devoid of fake paths and should be 1:1 with the actual paths taken with the normal script.
+NOTE as of 2022-07-21 I can confidently say that Shape dosen't have any self defending checks in their virtual machine execution. The injected virtual machine is able to gen headers that pass fine on target. I can confidently say that the paths that're traced with the injected virtual machine are devoid of fake paths and should be 1:1 with the actual paths taken with the normal script in the browser.
 
 
 If you just want to see the lifted javascript code you can go to the lifter/cleaned.js
